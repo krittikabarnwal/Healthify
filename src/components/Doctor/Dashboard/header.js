@@ -83,51 +83,50 @@ export const DoctorHeader = () => {
     });
   };
 
-  const postData = async (e) => {
-    e.preventDefault();
-    const { name, uniqueId, date, gender, symptons, diagnosis, test } =
-      prescripton;
-
-    const medicine = allmed;
-    console.log(medicine);
-    const res = await fetch(
-      "https://healthify-iitism-default-rtdb.firebaseio.com/prescription.json",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "aaplication/json",
-        },
-        body: JSON.stringify({
-          name,
-          uniqueId,
-          date,
-          gender,
-          symptons,
-          diagnosis,
-          test,
-          medicine,
-        }),
-      }
-    );
-    if (res) {
-      setOpen(false);
-      setAllMed([]);
-      setMed({
-        name: "",
-        quantity: 0,
-        remark: "",
-      });
-      setPrescription({
-        name: "get from api",
-        uniqueId: "",
-        date: y,
-        gender: "get from api",
-        symptons: "",
-        diagnosis: "",
-        test: "",
-      });
-      alert("Submitted Prescripton");
-    }
+  const postData = (e) => {
+    // e.preventDefault();
+    // const { name, uniqueId, date, gender, symptons, diagnosis, test } =
+    //   prescripton;
+    // const medicine = allmed;
+    // console.log(medicine);
+    // const res = await fetch(
+    //   "https://healthify-iitism-default-rtdb.firebaseio.com/prescription.json",
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       name,
+    //       uniqueId,
+    //       date,
+    //       gender,
+    //       symptons,
+    //       diagnosis,
+    //       test,
+    //       medicine,
+    //     }),
+    //   }
+    // );
+    // if (res) {
+    //   setOpen(false);
+    //   setAllMed([]);
+    //   setMed({
+    //     name: "",
+    //     quantity: 0,
+    //     remark: "",
+    //   });
+    //   setPrescription({
+    //     name: "get from api",
+    //     uniqueId: "",
+    //     date: y,
+    //     gender: "get from api",
+    //     symptons: "",
+    //     diagnosis: "",
+    //     test: "",
+    //   });
+    //   alert("Submitted Prescripton");
+    // }
   };
 
   return (
@@ -257,7 +256,7 @@ export const DoctorHeader = () => {
                       <div>
                         <TextField
                           id="input-with-icon-textfield"
-                          label="Student Name"
+                          label="Full Name"
                           color="success"
                           disabled="true"
                           InputProps={{

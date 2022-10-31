@@ -1,12 +1,12 @@
 import React from "react";
-import { HashRouter as Router, Route, NavLink } from "react-router-dom";
+import { HashRouter as NavLink } from "react-router-dom";
 import SignUpForm from "./SignUpForm";
 import "./index.css";
 
 export const SignUpStudent = () => {
   return (
     <div className="d-flex">
-      <div className="appAside">
+      <div className="appAside studentcolor">
         <div className="heading text-white">
           <div>Student</div>
           <div>Login</div>

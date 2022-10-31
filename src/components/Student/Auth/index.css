@@ -1,6 +1,5 @@
 .appAside {
   width: 40%;
-  background-color: #6b5b95;
   height: 100vh;
   position: sticky;
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
@@ -45,7 +44,6 @@
 .pageSwitcherItemactiveSignIn {
   border-top-left-radius: 25px;
   border-bottom-left-radius: 25px;
-  background-color: #6b5b95;
   color: white;
 }
 .pageSwitcherItemactiveSignUp {

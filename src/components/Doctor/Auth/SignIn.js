@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-import { HashRouter as Router, Route, NavLink } from "react-router-dom";
-import SignInForm from "./SignInForm";
-import SignUpForm from "./SignUpForm";
+import { HashRouter as NavLink } from "react-router-dom";
+import { SignInForm } from "./SignInForm";
 import "./index.css";
 
 export const SignIn = () => {
   return (
     <div className="d-flex">
-      <div className="appAside">
+      <div className="appAside doctorcolor">
         <div className="heading text-white">
           <div>Doctor</div>
           <div>Login</div>
@@ -19,7 +18,7 @@ export const SignIn = () => {
           <NavLink
             to="/doctor/sign-in"
             activeClassName="pageSwitcherItem-active"
-            className="pageSwitcherItem pageSwitcherItemactiveSignIn"
+            className="pageSwitcherItem pageSwitcherItemactiveSignIn doctorcolor"
           >
             Sign In
           </NavLink>

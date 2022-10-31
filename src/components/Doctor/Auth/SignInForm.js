@@ -1,77 +1,84 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { Link } from "react-router-dom";
+// import {
+//   createUserWithEmailAndPassword,
+//   signInWithEmailAndPassword,
+//   onAuthStateChanged,
+//   signOut,
+// } from "firebase/auth";
+// import { auth } from "./../../firebase-config";
 
-class SignInForm extends Component {
-  constructor() {
-    super();
+export const SignInForm = () => {
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
 
-    this.state = {
-      email: "",
-      password: "",
-    };
+  const [user, setUser] = useState({});
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+  // onAuthStateChanged(auth, (currentUser) => {
+  //   setUser(currentUser);
+  // });
 
-  handleChange(event) {
-    let target = event.target;
-    let value = target.type === "checkbox" ? target.checked : target.value;
-    let name = target.name;
+  const login = () => {
+    // try {
+    //   const user = await signInWithEmailAndPassword(
+    //     auth,
+    //     loginEmail,
+    //     loginPassword
+    //   );
+    //   console.log(user);
+    // } catch (error) {
+    //   console.log(error.message);
+    // }
+  };
 
-    this.setState({
-      [name]: value,
-    });
-  }
+  const logout = () => {
+    // await signOut(auth);
+  };
 
-  handleSubmit(event) {
-    event.preventDefault();
+  return (
+    <div className="formCenter">
+      <form className="formFields" onSubmit={this.handleSubmit}>
+        <div className="formField">
+          <label className="formFieldLabel" htmlFor="email">
+            Email Id
+          </label>
+          <input
+            type="text"
+            id="id"
+            className="formFieldInput"
+            placeholder="Enter your User Name"
+            name="id"
+            onChange={(event) => {
+              setLoginEmail(event.target.value);
+            }}
+          />
+        </div>
 
-    console.log("The form was submitted with the following data:");
-    console.log(this.state);
-  }
+        <div className="formField">
+          <label className="formFieldLabel" htmlFor="password">
+            Password
+          </label>
+          <input
+            type="password"
+            id="password"
+            className="formFieldInput"
+            placeholder="Enter your password"
+            name="password"
+            onChange={(event) => {
+              setLoginPassword(event.target.value);
+            }}
+          />
+        </div>
 
-  render() {
-    return (
-      <div className="formCenter">
-        <form className="formFields" onSubmit={this.handleSubmit}>
-          <div className="formField">
-            <label className="formFieldLabel" htmlFor="email">
-              User Name
-            </label>
-            <input
-              type="text"
-              id="id"
-              className="formFieldInput"
-              placeholder="Enter your User Name"
-              name="id"
-              value={this.state.email}
-              onChange={this.handleChange}
-            />
-          </div>
-
-          <div className="formField">
-            <label className="formFieldLabel" htmlFor="password">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              className="formFieldInput"
-              placeholder="Enter your password"
-              name="password"
-              value={this.state.password}
-              onChange={this.handleChange}
-            />
-          </div>
-
-          <div className="formField">
-            <button className="formFieldButton">Sign In</button>{" "}
-          </div>
-        </form>
-      </div>
-    );
-  }
-}
-
-export default SignInForm;
+        <div className="formField">
+          <button
+            className="formFieldButton"
+            // onClick={login}
+          >
+            Sign In
+          </button>{" "}
+        </div>
+      </form>
+    </div>
+  );
+};

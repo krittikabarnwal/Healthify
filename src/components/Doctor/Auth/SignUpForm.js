@@ -1,106 +1,109 @@
-import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import React, { Component, useState } from "react";
+// import {
+//   createUserWithEmailAndPassword,
+//   onAuthStateChanged,
+//   signOut,
+// } from "firebase/auth";
+// import { auth } from "./../../firebase-config";
 
-class SignUpForm extends Component {
-  constructor() {
-    super();
+export const SignUpForm = () => {
+  const [registerEmail, setRegisterEmail] = useState("");
+  const [registerPassword, setRegisterPassword] = useState("");
 
-    this.state = {
-      email: "",
-      password: "",
-      name: "",
-      speciality: "",
-    };
+  const [user, setUser] = useState({});
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+  // onAuthStateChanged(auth, (currentUser) => {
+  //   setUser(currentUser);
+  // });
 
-  handleChange(event) {
-    let target = event.target;
-    let value = target.type === "checkbox" ? target.checked : target.value;
-    let name = target.name;
+  const register = () => {
+    // try {
+    //   const user = await createUserWithEmailAndPassword(
+    //     auth,
+    //     registerEmail,
+    //     registerPassword
+    //   );
+    //   console.log(user);
+    // } catch (error) {
+    //   console.log(error.message);
+    // }
+  };
 
-    this.setState({
-      [name]: value,
-    });
-  }
+  const logout = () => {
+    // await signOut(auth);
+  };
 
-  handleSubmit(e) {
-    e.preventDefault();
+  return (
+    <div className="formCenter">
+      <form className="formFields">
+        <div className="formField">
+          <label className="formFieldLabel" htmlFor="name">
+            Full Name
+          </label>
+          <input
+            type="text"
+            id="name"
+            className="formFieldInput"
+            placeholder="Enter your full name"
+            name="name"
+          />
+        </div>
+        <div className="formField">
+          <label className="formFieldLabel" htmlFor="email">
+            Speciality{" "}
+          </label>
+          <input
+            type="text"
+            id="Speciality"
+            className="formFieldInput"
+            placeholder="Enter your Speciality"
+            name="Speciality"
+          />
+        </div>
 
-    console.log("The form was submitted with the following data:");
-    console.log(this.state);
-  }
+        <div className="formField">
+          <label className="formFieldLabel" htmlFor="email">
+            E-Mail Address
+          </label>
+          <input
+            type="email"
+            id="email"
+            className="formFieldInput"
+            placeholder="Enter your email"
+            name="email"
+            onChange={(event) => {
+              setRegisterEmail(event.target.value);
+            }}
+          />
+        </div>
+        <div className="formField">
+          <label className="formFieldLabel" htmlFor="password">
+            Password
+          </label>
+          <input
+            type="password"
+            id="password"
+            className="formFieldInput"
+            placeholder="Enter your password"
+            name="password"
+            onChange={(event) => {
+              setRegisterPassword(event.target.value);
+            }}
+          />
+        </div>
+        <h4> User Logged In: </h4>
+        {user?.email}
 
-  render() {
-    return (
-      <div className="formCenter">
-        <form onSubmit={this.handleSubmit} className="formFields">
-          <div className="formField">
-            <label className="formFieldLabel" htmlFor="name">
-              Full Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              className="formFieldInput"
-              placeholder="Enter your full name"
-              name="name"
-              value={this.state.name}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="formField">
-            <label className="formFieldLabel" htmlFor="email">
-              Speciality{" "}
-            </label>
-            <input
-              type="text"
-              id="Speciality"
-              className="formFieldInput"
-              placeholder="Enter your Speciality"
-              name="Speciality"
-              value={this.state.Speciality}
-              onChange={this.handleChange}
-            />
-          </div>
-
-          <div className="formField">
-            <label className="formFieldLabel" htmlFor="email">
-              E-Mail Address
-            </label>
-            <input
-              type="email"
-              id="email"
-              className="formFieldInput"
-              placeholder="Enter your email"
-              name="email"
-              value={this.state.email}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="formField">
-            <label className="formFieldLabel" htmlFor="password">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              className="formFieldInput"
-              placeholder="Enter your password"
-              name="password"
-              value={this.state.password}
-              onChange={this.handleChange}
-            />
-          </div>
-
-          <div className="formField">
-            <button className="formFieldButton">Sign Up</button>{" "}
-          </div>
-        </form>
-      </div>
-    );
-  }
-}
-export default SignUpForm;
+        <div className="formField">
+          <button
+            className="formFieldButton"
+            // onClick={register}
+          >
+            Sign Up
+          </button>{" "}
+        </div>
+      </form>
+    </div>
+  );
+};
