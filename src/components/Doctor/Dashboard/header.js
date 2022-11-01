@@ -10,12 +10,14 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import InputAdornment from "@mui/material/InputAdornment";
 import Fab from "@mui/material/Fab";
+import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import WcIcon from "@mui/icons-material/Wc";
 import TextField from "@mui/material/TextField";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CloseIcon from "@mui/icons-material/Close";
+import Tooltip from "@mui/material/Tooltip";
 
 import "./index.css";
 const style = {
@@ -131,58 +133,57 @@ export const DoctorHeader = () => {
   };
 
   return (
-    <div className="DoctorNavbar d-flex justify-content-between border-bottom mt-2">
-      <div className="NavLogo d-flex">
-        <LocalHospitalIcon
-          fontSize="large"
-          sx={{ color: "#256d85", fontSize: "45px" }}
-        />
+    <div className="DoctorNavbar d-flex justify-content-between border-bottom doctorcolor text-white">
+      <div className="NavLogo d-flex my-2">
+        {/* <img src={"/images/icon.jpeg"} width="60px" /> */}
+        <LocalHospitalIcon fontSize="large" sx={{ fontSize: "45px" }} />
+
         <div className="headingNav mt-2 mx-3">Doctor</div>
       </div>
 
-      <div className="d-flex my-2">
+      <div className="d-flex ">
         <div className="d-flex mx-4">
-          <IconButton
-            type="button"
-            sx={{ px: "4px", py: "0" }}
+          <Button
+            variant="text"
+            sx={{ px: "4px", py: "0", my: "0" }}
             onClick={handleOpen}
           >
-            <AddCircleOutlineIcon
-              fontSize="large"
-              color="success"
-              sx={{ px: "5px" }}
-            />
-            <h5 className="">New Prescription</h5>
-          </IconButton>
+            <div className="text-white ">+ New Prescription</div>
+          </Button>
+          <Tooltip title="Create a new Prescription">
+            <button className="PrescriptionStickyButton" onClick={handleOpen}>
+              <AddCircleOutlineIcon fontSize="large" />
+            </button>
+          </Tooltip>
         </div>
-        <div className="verticalLine"></div>
+        <div className="verticalLine mt-3"></div>
 
-        <div className="">
+        <div className="  d-flex align-items-bottom">
           <IconButton type="button" sx={{ p: "4px" }} aria-label="search">
-            <SearchIcon />
+            <SearchIcon sx={{ color: "white" }} />
           </IconButton>
           <InputBase
-            sx={{ ml: 1, flex: 1 }}
+            sx={{ ml: 1, flex: 1, color: "white" }}
             placeholder="Search Student"
             inputProps={{ "aria-label": "search student" }}
           />
         </div>
-        <div className="verticalLine"></div>
+        <div className="verticalLine mt-3"></div>
 
-        <div className="ms-3">
+        <div className="ms-3 d-flex align-items-bottom">
           <IconButton type="button" sx={{ p: "4px" }} aria-label="search">
-            <SearchIcon />
+            <SearchIcon sx={{ color: "white" }} />
           </IconButton>
           <InputBase
-            sx={{ ml: 1, flex: 1 }}
+            sx={{ ml: 1, flex: 1, color: "white" }}
             placeholder="Search Medicine"
             inputProps={{ "aria-label": "search medicine" }}
           />
         </div>
-        <div className="verticalLine"></div>
+        <div className="verticalLine mt-3"></div>
 
-        <div className="d-flex">
-          <div className="UserName mx-3 mt-1">User Name</div>
+        <div className="d-flex mt-3">
+          <div className="UserName mx-3">User Name</div>
           <AccountCircleIcon fontSize="large" sx={{ mx: "5px" }} />
         </div>
         <Modal

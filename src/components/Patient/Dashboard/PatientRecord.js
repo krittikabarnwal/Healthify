@@ -21,7 +21,7 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-export const Prescriptions = () => {
+export const PatientRecords = () => {
   const prescriptions = [
     {
       id: "iiddididi",
@@ -102,7 +102,7 @@ export const Prescriptions = () => {
   const [expanded, setExpanded] = React.useState("");
 
   return (
-    <div className="color1 py-3">
+    <div className="color3 py-3">
       {prescriptions.map((prescription) => (
         <div className=" w-100 h-100 d-flex justify-content-center py-3">
           <Card
@@ -112,7 +112,7 @@ export const Prescriptions = () => {
           >
             <CardHeader
               avatar={
-                <Avatar className={"doctorcolor"} aria-label="recipe">
+                <Avatar className={"patientcolor"} aria-label="recipe">
                   {prescription.name[0]}
                 </Avatar>
               }
@@ -129,10 +129,8 @@ export const Prescriptions = () => {
                   <ExpandMoreIcon />
                 </ExpandMore>
               }
-              title={prescription.name + "  ( " + prescription.uniqueId + " )"}
-              subheader={
-                prescription.date + "  ( " + prescription.doctorName + " )"
-              }
+              title={prescription.doctorName}
+              subheader={prescription.date + "  ( " + prescription.name + " )"}
             />
 
             <CardContent>

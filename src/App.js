@@ -1,22 +1,17 @@
 import "./App.css";
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Home from "./components/Home/home";
-import { SignIn } from "./components/Doctor/Auth/SignIn";
-import { SignUp } from "./components/Doctor/Auth/SignUp";
-import { SignInStudent } from "./components/Student/Auth/SignIn";
-import { SignUpStudent } from "./components/Student/Auth/SignUp";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { DoctorDashboard } from "./components/Doctor/Dashboard";
+import { UserAuth } from "./components/Auth/UserAuth";
+import { StudentDashboard } from "./components/Patient/Dashboard";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/doctor" element={<SignUp />} />
-        <Route path="/doctor/sign-in" element={<SignIn />} />
-        <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
-        <Route path="/student" element={<SignUpStudent />} />
-        <Route path="/student/sign-in" element={<SignInStudent />} />
+        <Route path="/" element={<UserAuth />} />
+        <Route path="/doctor" element={<DoctorDashboard />} />
+        <Route path="/student" element={<StudentDashboard />} />
       </Routes>
     </BrowserRouter>
   );
