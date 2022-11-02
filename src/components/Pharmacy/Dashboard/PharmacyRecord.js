@@ -117,6 +117,9 @@ export const PharmacyRecords = () => {
       medicineGiven: "Rakesh Singh",
     },
   ];
+  const handleGiveMedicine = (id) => {
+    console.log("given medicine to ", id);
+  };
 
   return (
     <div className="color2 py-3">
@@ -139,8 +142,11 @@ export const PharmacyRecords = () => {
           <Tab label="All Prescriptions" {...a11yProps(1)} />
           <Tab label="Inventory" {...a11yProps(2)} />
         </Tabs>
-        <div className="d-flex justify-content-center w-75">
-          <div>
+        <div
+          className="d-flex justify-content-center w-100"
+          style={{ height: "90vh" }}
+        >
+          <div className=" overflow-auto ">
             <TabPanel value={value} index={0}>
               {prescriptions.map((prescription) => (
                 <div>
@@ -210,7 +216,13 @@ export const PharmacyRecords = () => {
                             </TableContainer>
                             <div className="mt-3">
                               {prescription.medicineGiven === "" ? (
-                                <Button variant="contained" className="color4">
+                                <Button
+                                  variant="contained"
+                                  className="color4"
+                                  onClick={() =>
+                                    handleGiveMedicine(prescription.id)
+                                  }
+                                >
                                   Give Medicine
                                 </Button>
                               ) : (

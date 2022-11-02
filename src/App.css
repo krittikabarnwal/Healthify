@@ -2,11 +2,11 @@
   background-color: #eaeaea !important;
 }
 .doctorcolor {
-  background-color: #01686e !important;
+  background-color: rgb(1, 104, 110) !important;
 }
 
 .pharmacycolor {
-  background-color: #2f4f52 !important;
+  background-color: rgb(47, 79, 82) !important;
 }
 
 .color2 {
@@ -17,7 +17,7 @@
 }
 
 .patientcolor {
-  background-color: #256d85 !important;
+  background-color: rgb(37, 109, 133) !important;
 }
 .color3 {
   background-color: #b3eef5 !important;

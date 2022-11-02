@@ -38,17 +38,76 @@ const medicines = [
     quantity: 8,
     expiry: "22/01/2022",
   },
+  {
+    id: "gf667",
+    name: "paracetamol",
+    quantity: 5,
+    expiry: "22/01/2022",
+  },
+  {
+    id: "gfhf7gdg",
+    name: "cetzine",
+    quantity: 8,
+    expiry: "22/01/2022",
+  },
+  {
+    id: "gf667kjhkj",
+    name: "pudin hara",
+    quantity: 8,
+    expiry: "22/01/2022",
+  },
+  {
+    id: "gfh667rd",
+    name: "meftal spas",
+    quantity: 8,
+    expiry: "22/01/2022",
+  },
+  {
+    id: "gfhf6j67",
+    name: "paracetamol",
+    quantity: 5,
+    expiry: "22/01/2022",
+  },
+  {
+    id: "gfhf667g",
+    name: "cetzine",
+    quantity: 8,
+    expiry: "22/01/2022",
+  },
+  {
+    id: "gfhf667kjh",
+    name: "pudin hara",
+    quantity: 8,
+    expiry: "22/01/2022",
+  },
+  {
+    id: "gfhf66rd",
+    name: "meftal spas",
+    quantity: 8,
+    expiry: "22/01/2022",
+  },
 ];
 
 export const Inventory = () => {
   const [rows, setRows] = useState(medicines);
   const [searched, setSearched] = useState("");
 
-  const [med, setMed] = useState({
+  const [newMedicine, setnewMedicine] = useState({
     name: "",
     quantity: 0,
     expiry: "",
   });
+  const handleInputMedicine = (e) => {
+    setnewMedicine({ ...newMedicine, [e.target.name]: e.target.value });
+  };
+  const handleAddMedicine = (e) => {
+    console.log(newMedicine);
+    setnewMedicine({
+      name: "",
+      quantity: 0,
+      expiry: "",
+    });
+  };
 
   const requestSearch = (searchedVal) => {
     const filteredRows = medicines.filter((row) => {
@@ -67,16 +126,20 @@ export const Inventory = () => {
     requestSearch(searched);
   };
   return (
-    <div style={{ width: "800px" }}>
-      <div>
-        <div className="d-flex justify-content-between mb-4">
+    <div style={{ width: "850px" }}>
+      <div
+        className="mb-2"
+        style={{ position: "sticky", top: "0px", zIndex: "100" }}
+      >
+        <div className="d-flex justify-content-between bg-white p-2">
           <div className="mx-1 mt-1">
             <TextField
               id="input-with-icon-textfield"
               label="Medicine Name"
               variant="standard"
-              //   value={med.name}
-              //   onChange={(e) => setMed({ ...med, name: e.target.value })}
+              name="name"
+              value={newMedicine.name}
+              onChange={(e) => handleInputMedicine(e)}
             />
           </div>
           <div className="mx-1 mt-1">
@@ -85,8 +148,9 @@ export const Inventory = () => {
               type="number"
               label="Quantity"
               variant="standard"
-              //   value={med.quantity}
-              //   onChange={(e) => setMed({ ...med, quantity: e.target.value })}
+              name="quantity"
+              value={newMedicine.quantity}
+              onChange={(e) => handleInputMedicine(e)}
             />
           </div>
           <div className="mx-1">
@@ -95,8 +159,9 @@ export const Inventory = () => {
               id="input-with-icon-textfield"
               type="date"
               variant="standard"
-              //   value={med.quantity}
-              //   onChange={(e) => setMed({ ...med, quantity: e.target.value })}
+              name="expiry"
+              value={newMedicine.expiry}
+              onChange={(e) => handleInputMedicine(e)}
             />
           </div>
 
@@ -106,7 +171,7 @@ export const Inventory = () => {
             className="color4 rounded mt-2"
             variant="contained"
             sx={{ width: "40px", height: "40px" }}
-            //   onClick={() => handleAddmedicine()}
+            onClick={() => handleAddMedicine()}
           >
             <AddIcon fontSize="small" />
           </Button>

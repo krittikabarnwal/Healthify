@@ -7,7 +7,7 @@ export const StudentHeader = () => {
   return (
     <div className="DoctorNavbar d-flex justify-content-between border-bottom patientcolor text-white">
       <div className="NavLogo d-flex my-2">
-        <img className="ms-3" src={"/images/icon.jpeg"} width="70px" />
+        <img className="ms-3" src={"/images/patienticon.jpg"} width="80px" />
 
         <div className="headingNav mt-2 mx-3">Patient</div>
       </div>

@@ -10,6 +10,46 @@ export const UserAuth = () => {
   const [role, setrole] = useState("Doctor");
   const [formType, setformType] = useState("SignIn");
 
+  const [newUser, setnewUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+    uniqueId: "",
+    speciality: "",
+    gender: "",
+    dateOfBirth: "",
+    role: "",
+  });
+
+  const handleInput = (e) => {
+    setnewUser({ ...newUser, [e.target.name]: e.target.value });
+  };
+
+  const handleSignIn = () => {
+    if (role === "Doctor") {
+      setnewUser({ ...newUser, role: { role } });
+      console.log(newUser);
+    } else if (role === "Patient") {
+      setnewUser({ ...newUser, role: { role } });
+      console.log(newUser);
+    } else if (role === "Pharmacy") {
+      setnewUser({ ...newUser, role: { role } });
+      console.log(newUser);
+    }
+  };
+  const handleSignUp = () => {
+    if (role === "Doctor") {
+      setnewUser({ ...newUser, role: { role } });
+      console.log(newUser);
+    } else if (role === "Patient") {
+      setnewUser({ ...newUser, role: { role } });
+      console.log(newUser);
+    } else if (role === "Pharmacy") {
+      setnewUser({ ...newUser, role: { role } });
+      console.log(newUser);
+    }
+  };
+
   return (
     <div className="d-flex">
       <div className={`appAside ${color()}`}>
@@ -43,7 +83,7 @@ export const UserAuth = () => {
         </div>
         <div className="heading text-white">
           <div>{role}</div>
-          <div>Login</div>
+          <div>{formType === "SignIn" ? "Login" : "Register"}</div>
         </div>
       </div>
       <div className="appForm">
@@ -92,14 +132,16 @@ export const UserAuth = () => {
             <form className="formFields">
               <div className="formField">
                 <label className="formFieldLabel" htmlFor="email">
-                  User Name
+                  Email
                 </label>
                 <input
-                  type="text"
-                  id="id"
+                  type="email"
+                  id="email"
                   className="formFieldInput"
                   placeholder="Enter your User Name"
-                  name="id"
+                  name="email"
+                  value={newUser.email}
+                  onChange={(e) => handleInput(e)}
                 />
               </div>
 
@@ -113,11 +155,18 @@ export const UserAuth = () => {
                   className="formFieldInput"
                   placeholder="Enter your password"
                   name="password"
+                  value={newUser.password}
+                  onChange={(e) => handleInput(e)}
                 />
               </div>
 
               <div className="formField">
-                <button className={`formFieldButton ${color()}`}>
+                <button
+                  className={`formFieldButton ${color()}`}
+                  onClick={() => {
+                    handleSignIn();
+                  }}
+                >
                   Sign In
                 </button>
               </div>
@@ -136,6 +185,8 @@ export const UserAuth = () => {
                   className="formFieldInput"
                   placeholder="Enter your full name"
                   name="name"
+                  value={newUser.name}
+                  onChange={(e) => handleInput(e)}
                 />
               </div>
               {role === "Doctor" && (
@@ -148,7 +199,9 @@ export const UserAuth = () => {
                     id="Speciality"
                     className="formFieldInput"
                     placeholder="Enter your Speciality"
-                    name="Speciality"
+                    name="speciality"
+                    value={newUser.speciality}
+                    onChange={(e) => handleInput(e)}
                   />
                 </div>
               )}
@@ -159,10 +212,12 @@ export const UserAuth = () => {
                   </label>
                   <input
                     type="text"
-                    id="Speciality"
+                    id="uniqueId"
                     className="formFieldInput"
                     placeholder="Enter Admission No./ Employee Id"
                     name="uniqueId"
+                    value={newUser.uniqueId}
+                    onChange={(e) => handleInput(e)}
                   />
                 </div>
               )}
@@ -171,10 +226,12 @@ export const UserAuth = () => {
                   <label className="formFieldLabel">Gender</label>
                   <input
                     type="text"
-                    id="Gender"
+                    id="gender"
                     className="formFieldInput"
                     placeholder="Male/ Female/ Others"
                     name="gender"
+                    value={newUser.gender}
+                    onChange={(e) => handleInput(e)}
                   />
                 </div>
               )}
@@ -187,6 +244,8 @@ export const UserAuth = () => {
                     className="formFieldInput"
                     placeholder="Enter your date of birth"
                     name="dateOfBirth"
+                    value={newUser.dateOfBirth}
+                    onChange={(e) => handleInput(e)}
                   />
                 </div>
               )}
@@ -201,6 +260,8 @@ export const UserAuth = () => {
                   className="formFieldInput"
                   placeholder="Enter your email"
                   name="email"
+                  value={newUser.email}
+                  onChange={(e) => handleInput(e)}
                 />
               </div>
               <div className="formField">
@@ -213,11 +274,18 @@ export const UserAuth = () => {
                   className="formFieldInput"
                   placeholder="Enter your password"
                   name="password"
+                  value={newUser.password}
+                  onChange={(e) => handleInput(e)}
                 />
               </div>
 
               <div className="formField">
-                <button className={`formFieldButton ${color()}`}>
+                <button
+                  className={`formFieldButton ${color()}`}
+                  onClick={() => {
+                    handleSignUp();
+                  }}
+                >
                   Sign Up
                 </button>
               </div>

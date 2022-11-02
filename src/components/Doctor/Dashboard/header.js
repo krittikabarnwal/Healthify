@@ -18,6 +18,13 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CloseIcon from "@mui/icons-material/Close";
 import Tooltip from "@mui/material/Tooltip";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
 import "./index.css";
 const style = {
@@ -135,7 +142,11 @@ export const DoctorHeader = () => {
   return (
     <div className="DoctorNavbar d-flex justify-content-between border-bottom doctorcolor text-white">
       <div className="NavLogo d-flex my-2">
-        {/* <img src={"/images/icon.jpeg"} width="60px" /> */}
+        <img
+          src={"/images/doctoricon.jpg"}
+          width="70px"
+          className="ms-2 me-4"
+        />
         <LocalHospitalIcon fontSize="large" sx={{ fontSize: "45px" }} />
 
         <div className="headingNav mt-2 mx-3">Doctor</div>
@@ -320,6 +331,18 @@ export const DoctorHeader = () => {
                         required
                       />
                     </div>
+                    <div className="my-3">
+                      <TextField
+                        fullWidth
+                        id="outlined-multiline-static"
+                        label="Tests"
+                        multiline
+                        rows={3}
+                        name="test"
+                        value={prescripton.test}
+                        onChange={handlePrescription}
+                      />
+                    </div>
                     <div className="mt-3">
                       Medicine:
                       <div className="d-flex justify-content-between">
@@ -380,32 +403,37 @@ export const DoctorHeader = () => {
                         </div>
                       </div>
                       <div class=" my-4">
-                        {allmed.map((med) => (
-                          <div className="row">
-                            <div class="col">
-                              <div>{med.name}</div>
-                            </div>
-                            <div class="col">
-                              <div>{med.quantity}</div>
-                            </div>
-                            <div class="col">
-                              <div>{med.remark}</div>
-                            </div>
-                          </div>
-                        ))}
+                        <TableContainer component={Paper}>
+                          <Table
+                            sx={{ minWidth: 650 }}
+                            size="small"
+                            aria-label="a dense table"
+                          >
+                            <TableHead>
+                              <TableRow>
+                                <TableCell>Medicine Name</TableCell>
+                                <TableCell align="right">Quantity</TableCell>
+                                <TableCell align="right">Remark</TableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              {allmed.map((row) => (
+                                <TableRow key={row.name}>
+                                  <TableCell component="th" scope="row">
+                                    {row.name}
+                                  </TableCell>
+                                  <TableCell align="right">
+                                    {row.quantity}
+                                  </TableCell>
+                                  <TableCell align="right">
+                                    {row.remark}
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
                       </div>
-                    </div>
-                    <div className="my-3">
-                      <TextField
-                        fullWidth
-                        id="outlined-multiline-static"
-                        label="Tests"
-                        multiline
-                        rows={3}
-                        name="test"
-                        value={prescripton.test}
-                        onChange={handlePrescription}
-                      />
                     </div>
                   </Typography>
                   <div className="d-flex justify-content-center mt-3">
