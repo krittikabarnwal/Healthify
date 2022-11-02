@@ -369,7 +369,8 @@ export const DoctorHeader = () => {
                         </div>
                         <div className="mx-1">
                           <Fab
-                            color="primary"
+                            className="doctorcolor"
+                            sx={{ color: "white" }}
                             aria-label="add"
                             size="small"
                             onClick={() => handleAddmedicine()}
@@ -410,9 +411,9 @@ export const DoctorHeader = () => {
                   <div className="d-flex justify-content-center mt-3">
                     <Fab
                       variant="extended"
-                      color="success"
+                      className="doctorcolor"
                       aria-label="add"
-                      sx={{ px: 5 }}
+                      sx={{ px: 5, color: "white" }}
                       type="submit"
                       onClick={postData}
                     >

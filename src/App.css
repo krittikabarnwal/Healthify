@@ -1,18 +1,24 @@
 .color1 {
-  background-color: #b3eef5 !important;
-}
-.color2 {
-  color: #202b2c !important;
-}
-.color3 {
   background-color: #eaeaea !important;
 }
 .doctorcolor {
+  background-color: #01686e !important;
+}
+
+.pharmacycolor {
+  background-color: #2f4f52 !important;
+}
+
+.color2 {
+  background-color: #cde5df !important;
+}
+.color4 {
+  background-color: #519fa8 !important;
+}
+
+.patientcolor {
   background-color: #256d85 !important;
 }
-.patientcolor {
-  background-color: #00abb3 !important;
-}
-.pharmacycolor {
-  background-color: #003865 !important;
+.color3 {
+  background-color: #b3eef5 !important;
 }
