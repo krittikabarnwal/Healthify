@@ -25,8 +25,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-
+import { useNavigate } from "react-router";
+import { LogoutUser } from "../Auth/logout";
 import "./index.css";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -38,7 +40,8 @@ const style = {
   p: 4,
 };
 
-export const DoctorHeader = () => {
+export const DoctorHeader = (user) => {
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -100,11 +103,11 @@ export const DoctorHeader = () => {
     const medicine = allmed;
     console.log(medicine);
     const res = await fetch(
-      "https://healthify-iitism-default-rtdb.firebaseio.com/prescription.json",
+      "https://healthyify-krittika-default-rtdb.asia-southeast1.firebasedatabase.app/prescription.json",
       {
         method: "POST",
         headers: {
-          "Content-Type": "aaplication/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           name,
@@ -193,9 +196,11 @@ export const DoctorHeader = () => {
         </div>
         <div className="verticalLine mt-3"></div>
 
-        <div className="d-flex mt-3">
-          <div className="UserName mx-3">User Name</div>
-          <AccountCircleIcon fontSize="large" sx={{ mx: "5px" }} />
+        <div className="d-flex">
+          <div className="UserName mx-3 mt-3">
+            {user ? user.user.user.displayName : "User Name"}
+          </div>
+          <LogoutUser />
         </div>
         <Modal
           open={open}

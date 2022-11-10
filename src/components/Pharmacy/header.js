@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import React from "react";
+import { LogoutUser } from "../Auth/logout";
 
 import "./index.css";
 
-export const PharmacyHeader = () => {
+export const PharmacyHeader = (user) => {
   return (
     <div className="DoctorNavbar d-flex justify-content-between border-bottom pharmacycolor text-white">
       <div className="NavLogo d-flex my-2">
@@ -15,9 +15,11 @@ export const PharmacyHeader = () => {
       <div className="d-flex ">
         <div className="verticalLine mt-3"></div>
 
-        <div className="d-flex mt-3">
-          <div className="UserName mx-3">User Name</div>
-          <AccountCircleIcon fontSize="large" sx={{ mx: "5px" }} />
+        <div className="d-flex mt-2">
+          <div className="UserName mx-3 mt-2">
+            {user ? user.user.user.displayName : ""}
+          </div>
+          <LogoutUser />
         </div>
       </div>
     </div>

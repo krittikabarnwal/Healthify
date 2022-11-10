@@ -18,23 +18,3 @@ export const auth = getAuth(app);
 
 export const db = app.firestore;
 console.log(db);
-
-// export const createDoctorDocument = async (user, { newUser }) => {
-//   if (!user) return;
-//   const userRef = firestore.doc(`doctors/${user.uid}`);
-//   const snapshot = await userRef.get();
-
-//   if (!snapshot.exists) {
-//     const { email, name, speciality } = { newUser };
-//     // console.log(name, emailId, speciality);
-//     try {
-//       userRef.set({
-//         name,
-//         email,
-//         speciality,
-//       });
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
-// };

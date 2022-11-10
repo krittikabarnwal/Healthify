@@ -1,9 +1,15 @@
 import React, { useState } from "react";
-import { auth, createDoctorDocument, db } from "../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { useNavigate } from "react-router";
 import "./index.css";
 
 export const UserAuth = () => {
+  const navigate = useNavigate();
   const color = () => {
     if (role === "Doctor") return "doctorcolor";
     if (role === "Patient") return "patientcolor";
@@ -27,43 +33,71 @@ export const UserAuth = () => {
     setnewUser({ ...newUser, [e.target.name]: e.target.value });
   };
 
-  const handleSignIn = () => {
+  const handleSignIn = async (e) => {
+    e.preventDefault();
     setnewUser({ ...newUser, role: { role } });
-
-    // if (role === "Doctor") {
-
-    // } else if (role === "Patient") {
-    //   console.log(newUser);
-    // } else if (role === "Pharmacy") {
-    //   console.log(newUser);
-    // }
+    const { email, password } = newUser;
+    if (email && password) {
+      try {
+        const { user } = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        if (user) {
+          alert("Succuessful Login");
+          navigate(`${role.toLowerCase()}`);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+      setnewUser({
+        name: "",
+        email: "",
+        password: "",
+        uniqueId: "",
+        speciality: "",
+        gender: "",
+        dateOfBirth: "",
+        role: "",
+      });
+    }
   };
   const handleSignUp = async (e) => {
     e.preventDefault();
     setnewUser({ ...newUser, role: { role } });
-    const email = newUser.email;
-    const disname = newUser.name;
-    const docspeciality = newUser.speciality;
-    const password = newUser.password;
+    const { name, email, password, uniqueId, speciality, gender, dateOfBirth } =
+      newUser;
     try {
-      const { user } = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
+      await createUserWithEmailAndPassword(auth, email, password).then(
+        (res) => {
+          updateProfile(res.user, {
+            displayName: name,
+          });
+        }
       );
-      // .then((cred) => {
-      //   return db.collections("doctors").add(user.uid).set({
-      //     name: disname,
-      //     speciality: docspeciality,
-      //   });
-      // });
-      // await setDoc(doc(db, "doctors", user.uid), {
-      //   name: name,
-      //   speciality: speciality,
-      // });
-
-      console.log(newUser);
-      // const { temp } = await createDoctorDocument(user, { newUser });
+      const res = await fetch(
+        `https://healthyify-krittika-default-rtdb.asia-southeast1.firebasedatabase.app/${role}.json`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            password,
+            uniqueId,
+            speciality,
+            gender,
+            dateOfBirth,
+          }),
+        }
+      );
+      if (res) {
+        alert("Succuessful Sign up");
+        navigate(`${role.toLowerCase()}`);
+      }
     } catch (error) {
       console.log("auth error ", error);
     }
@@ -192,8 +226,8 @@ export const UserAuth = () => {
               <div className="formField">
                 <button
                   className={`formFieldButton ${color()}`}
-                  onClick={() => {
-                    handleSignIn();
+                  onClick={(e) => {
+                    handleSignIn(e);
                   }}
                 >
                   Sign In
