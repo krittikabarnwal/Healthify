@@ -1,10 +1,10 @@
 import "./App.css";
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { DoctorDashboard } from "./components/Doctor/Dashboard";
+import { DoctorDashboard } from "./components/Doctor";
 import { UserAuth } from "./components/Auth/UserAuth";
-import { StudentDashboard } from "./components/Patient/Dashboard";
-import { PharmacyDashboard } from "./components/Pharmacy/Dashboard";
+import { StudentDashboard } from "./components/Patient";
+import { PharmacyDashboard } from "./components/Pharmacy";
 
 function App() {
   return (

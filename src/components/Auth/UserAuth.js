@@ -1,4 +1,6 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
+import { auth, createDoctorDocument, db } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import "./index.css";
 
 export const UserAuth = () => {
@@ -26,28 +28,55 @@ export const UserAuth = () => {
   };
 
   const handleSignIn = () => {
-    if (role === "Doctor") {
-      setnewUser({ ...newUser, role: { role } });
-      console.log(newUser);
-    } else if (role === "Patient") {
-      setnewUser({ ...newUser, role: { role } });
-      console.log(newUser);
-    } else if (role === "Pharmacy") {
-      setnewUser({ ...newUser, role: { role } });
-      console.log(newUser);
-    }
+    setnewUser({ ...newUser, role: { role } });
+
+    // if (role === "Doctor") {
+
+    // } else if (role === "Patient") {
+    //   console.log(newUser);
+    // } else if (role === "Pharmacy") {
+    //   console.log(newUser);
+    // }
   };
-  const handleSignUp = () => {
-    if (role === "Doctor") {
-      setnewUser({ ...newUser, role: { role } });
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    setnewUser({ ...newUser, role: { role } });
+    const email = newUser.email;
+    const disname = newUser.name;
+    const docspeciality = newUser.speciality;
+    const password = newUser.password;
+    try {
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      // .then((cred) => {
+      //   return db.collections("doctors").add(user.uid).set({
+      //     name: disname,
+      //     speciality: docspeciality,
+      //   });
+      // });
+      // await setDoc(doc(db, "doctors", user.uid), {
+      //   name: name,
+      //   speciality: speciality,
+      // });
+
       console.log(newUser);
-    } else if (role === "Patient") {
-      setnewUser({ ...newUser, role: { role } });
-      console.log(newUser);
-    } else if (role === "Pharmacy") {
-      setnewUser({ ...newUser, role: { role } });
-      console.log(newUser);
+      // const { temp } = await createDoctorDocument(user, { newUser });
+    } catch (error) {
+      console.log("auth error ", error);
     }
+    setnewUser({
+      name: "",
+      email: "",
+      password: "",
+      uniqueId: "",
+      speciality: "",
+      gender: "",
+      dateOfBirth: "",
+      role: "",
+    });
   };
 
   return (
@@ -282,8 +311,8 @@ export const UserAuth = () => {
               <div className="formField">
                 <button
                   className={`formFieldButton ${color()}`}
-                  onClick={() => {
-                    handleSignUp();
+                  onClick={(e) => {
+                    handleSignUp(e);
                   }}
                 >
                   Sign Up
