@@ -29,6 +29,8 @@ import { useNavigate } from "react-router";
 import { LogoutUser } from "../Auth/logout";
 import "./index.css";
 import { v4 as uuidv4 } from "uuid";
+import { ref, set } from "firebase/database";
+import { db } from "../firebase";
 
 const style = {
   position: "absolute",
@@ -83,7 +85,6 @@ export const DoctorHeader = (user) => {
     symptons: "",
     diagnosis: "",
     test: "",
-    uuid: uuidv4(),
   });
 
   const handlePrescription = (e) => {
@@ -101,52 +102,84 @@ export const DoctorHeader = (user) => {
 
   const postData = async (e) => {
     e.preventDefault();
-    const { name, uniqueId, date, symptons, diagnosis, test, uuid } =
-      prescripton;
+    const { name, uniqueId, date, symptons, diagnosis, test } = prescripton;
 
     const medicine = allmed;
-    console.log(medicine);
-    const res = await fetch(
-      "https://healthyify-krittika-default-rtdb.asia-southeast1.firebasedatabase.app/prescription.json",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uuid,
-          name,
-          uniqueId,
-          date,
-          symptons,
-          diagnosis,
-          test,
-          medicine,
-          doctorName: user.user.user.displayName,
-          doctorId: user.user.user.uid,
-        }),
-      }
-    );
-    if (res) {
-      setOpen(false);
-      setAllMed([]);
-      setMed({
-        name: "",
-        quantity: 0,
-        remark: "",
-      });
-      setPrescription({
-        name: "get from api",
-        uniqueId: "",
-        date: y,
-        gender: "get from api",
-        symptons: "",
-        diagnosis: "",
-        test: "",
-        uuid: uuidv4(),
-      });
-      alert("Submitted Prescripton");
-    }
+    const uuid = uuidv4();
+    set(ref(db, `/prescription/${uuid}`), {
+      uuid,
+      name,
+      uniqueId,
+      date,
+      symptons,
+      diagnosis,
+      test,
+      medicine,
+      doctorName: user.user.user.displayName,
+      doctorId: user.user.user.uid,
+      medicineGiven: "",
+    });
+    setOpen(false);
+    setAllMed([]);
+    setMed({
+      name: "",
+      quantity: 0,
+      remark: "",
+    });
+    setPrescription({
+      name: "get from api",
+      uniqueId: "",
+      date: y,
+      gender: "get from api",
+      symptons: "",
+      diagnosis: "",
+      test: "",
+    });
+    alert("Submitted Prescripton");
+
+    // console.log(medicine);
+    // const res = await fetch(
+    //   "https://healthyify-krittika-default-rtdb.asia-southeast1.firebasedatabase.app/prescription.json",
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       uuid,
+    //       name,
+    //       uniqueId,
+    //       date,
+    //       symptons,
+    //       diagnosis,
+    //       test,
+    //       medicine,
+    //       doctorName: user.user.user.displayName,
+    //       doctorId: user.user.user.uid,
+    //       medicineGiven: "",
+    //     }),
+    //   }
+    // );
+    // if (res) {
+    //   setOpen(false);
+    //   setAllMed([]);
+    //   setMed({
+    //     name: "",
+    //     quantity: 0,
+    //     remark: "",
+    //   });
+    //   setPrescription({
+    //     name: "get from api",
+    //     uniqueId: "",
+    //     date: y,
+    //     gender: "get from api",
+    //     symptons: "",
+    //     diagnosis: "",
+    //     test: "",
+    //     uuid: uuidv4(),
+    //   });
+    //   alert("Submitted Prescripton");
+    // }
   };
 
   return (

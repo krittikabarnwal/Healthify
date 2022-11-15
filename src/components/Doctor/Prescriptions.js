@@ -17,8 +17,6 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { ref, onValue } from "firebase/database";
 import { db } from "../firebase";
-import { onSnapshot } from "firebase/firestore";
-import { collection, getDocs } from "firebase/firestore";
 import "./index.css";
 
 const ExpandMore = styled((props) => {
@@ -32,9 +30,8 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-const refpres = ref(db, "prescription");
-
 export const Prescriptions = (user) => {
+  const refpres = ref(db, "prescription");
   const [prescriptiondata, setPrecription] = useState([]);
   useEffect(() => {
     onValue(refpres, (snapshot) => {
@@ -89,9 +86,8 @@ export const Prescriptions = (user) => {
       ))} */}
       {prescriptiondata.map((prescription) => (
         <div>
-          {prescription.doctorId === user.user.user.uid ? (
+          {prescription.doctorId === user.user.user.uid && (
             <div className=" w-100 h-100 d-flex justify-content-center py-3">
-              {console.log(prescription.doctorId, user.user.user.uid)}
               <Card
                 sx={{
                   minWidth: 800,
@@ -124,9 +120,10 @@ export const Prescriptions = (user) => {
                   }
                 />
 
-                <CardContent>
+                <CardContent className="d-flex">
+                  <Typography variant="body2">Symptoms: &emsp;</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Symptoms: {prescription.symptons}
+                    {prescription.symptons}
                   </Typography>
                 </CardContent>
 
@@ -136,9 +133,26 @@ export const Prescriptions = (user) => {
                   unmountOnExit
                 >
                   <CardContent>
-                    <Typography paragraph>Diagnosis:</Typography>
-                    <Typography paragraph>{prescription.diagnosis}</Typography>
-                    <Typography paragraph>
+                    <div className="d-flex">
+                      <Typography variant="body2" paragraph>
+                        Diagnosis : &emsp;
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        paragraph
+                      >
+                        {"  " + prescription.diagnosis}
+                      </Typography>
+                    </div>
+                    <Typography variant="body2" paragraph>
+                      Medicines:
+                    </Typography>
+                    <Typography
+                      paragraph
+                      variant="body2"
+                      color="text.secondary"
+                    >
                       <TableContainer component={Paper}>
                         <Table
                           sx={{ minWidth: 650 }}
@@ -170,14 +184,16 @@ export const Prescriptions = (user) => {
                         </Table>
                       </TableContainer>
                     </Typography>
-                    <Typography>Test:</Typography>
-                    <Typography>{prescription.test}</Typography>
+                    <div className="d-flex">
+                      <Typography variant="body2">Test: &emsp;</Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {prescription.test}
+                      </Typography>
+                    </div>
                   </CardContent>
                 </Collapse>
               </Card>
             </div>
-          ) : (
-            <></>
           )}
         </div>
       ))}

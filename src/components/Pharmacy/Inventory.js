@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -12,6 +12,10 @@ import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import TextField from "@mui/material/TextField";
+import { v4 as uuidv4 } from "uuid";
+import { ref, onValue, set, remove, update } from "firebase/database";
+import { db } from "../firebase";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const medicines = [
   {
@@ -89,9 +93,39 @@ const medicines = [
 ];
 
 export const Inventory = () => {
-  const [rows, setRows] = useState(medicines);
-  const [searched, setSearched] = useState("");
+  const [isEdit, setIsEdit] = useState(false);
+  const [tempuuid, setTempUuid] = useState("");
+  const [data, setdata] = useState({});
+  const refinv = ref(db, "inventory");
+  const [rows, setRows] = useState([]);
+  const fetchData = (data) => {
+    if (data != null) {
+      Object.values(data).map((inventory) => {
+        setinventory((prev) => [...prev, inventory]);
+      });
+      setRows(() => inventorydata);
+    }
+  };
+  useEffect(() => {
+    onValue(refinv, (snapshot) => {
+      setinventory([]);
+      setdata(() => snapshot.val());
+      const data = snapshot.val();
+      if (data != null) {
+        Object.values(data).map((inventory) => {
+          console.log(inventory);
 
+          setinventory((prev) => [...prev, inventory]);
+        });
+        setRows(() => inventorydata);
+      }
+    });
+  }, []);
+  const [inventorydata, setinventory] = useState([]);
+
+  // const [rows, setRows] = useState(initialrows);
+
+  const [searched, setSearched] = useState("");
   const [newMedicine, setnewMedicine] = useState({
     name: "",
     quantity: 0,
@@ -100,26 +134,79 @@ export const Inventory = () => {
   const handleInputMedicine = (e) => {
     setnewMedicine({ ...newMedicine, [e.target.name]: e.target.value });
   };
-  const handleAddMedicine = (e) => {
-    console.log(newMedicine);
+  const handleAddMedicine = async (e) => {
+    e.preventDefault();
+    const { name, quantity, expiry } = newMedicine;
+
+    // console.log(newMedicine);
+    const uuid = uuidv4();
+    set(ref(db, `/inventory/${uuid}`), {
+      name,
+      expiry,
+      uuid,
+      quantity,
+    });
     setnewMedicine({
       name: "",
       quantity: 0,
       expiry: "",
     });
-  };
+    // const res = await fetch(
+    //   "https://healthyify-krittika-default-rtdb.asia-southeast1.firebasedatabase.app/inventory.json",
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       name,
+    //       quantity,
+    //       expiry,
+    //       uuid: uuidv4(),
+    //     }),
+    //   }
+    // );
 
+    alert("Added");
+    // if (res) {
+    //   setnewMedicine({
+    //     name: "",
+    //     quantity: 0,
+    //     expiry: "",
+    //   });
+    //   alert("Added");
+    // }
+  };
   const requestSearch = (searchedVal) => {
-    const filteredRows = medicines.filter((row) => {
+    console.log(inventorydata);
+    const filteredRows = inventorydata.filter((row) => {
       return row.name.toLowerCase().includes(searchedVal.toLowerCase());
     });
     setRows(filteredRows);
   };
-  const handleEdit = (id) => {
-    console.log(id);
+  const handleUpdate = (item) => {
+    setIsEdit(() => true);
+    setTempUuid(() => item.uuid);
+    setnewMedicine(() => item);
+    console.log(item.uuid);
   };
-  const handleDelete = (id) => {
-    console.log(id);
+  const handleUpdateSubmit = () => {
+    const { name, quantity, expiry } = newMedicine;
+    update(ref(db, `/inventory/${tempuuid}`), {
+      name,
+      expiry,
+      uuid: tempuuid,
+      quantity,
+    });
+    setnewMedicine({
+      name: "",
+      quantity: 0,
+      expiry: "",
+    });
+    setIsEdit(false);
+  };
+  const handleDelete = async (uuid) => {
+    remove(ref(db, `/inventory/${uuid}`));
   };
   const cancelSearch = () => {
     setSearched("");
@@ -165,27 +252,59 @@ export const Inventory = () => {
             />
           </div>
 
-          <Button
-            color="primary"
-            size="small"
-            className="color4 rounded mt-2"
-            variant="contained"
-            sx={{ width: "40px", height: "40px" }}
-            onClick={() => handleAddMedicine()}
-          >
-            <AddIcon fontSize="small" />
-          </Button>
+          {isEdit ? (
+            <>
+              <Button
+                color="primary"
+                size="small"
+                variant="text"
+                onClick={() => {
+                  setIsEdit(() => false);
+                  setnewMedicine({
+                    name: "",
+                    quantity: 0,
+                    expiry: "",
+                  });
+                }}
+              >
+                <CancelIcon />
+              </Button>
+
+              <Button
+                color="primary"
+                size="small"
+                className="color4 rounded mt-2"
+                variant="contained"
+                sx={{ width: "40px", height: "40px" }}
+                onClick={(e) => handleUpdateSubmit()}
+              >
+                Update
+              </Button>
+            </>
+          ) : (
+            <Button
+              color="primary"
+              size="small"
+              className="color4 rounded mt-2"
+              variant="contained"
+              sx={{ width: "40px", height: "40px" }}
+              onClick={(e) => handleAddMedicine(e)}
+            >
+              <AddIcon fontSize="small" />
+            </Button>
+          )}
         </div>
       </div>
       <div>
         <Paper>
-          <SearchBar
+          {/* <SearchBar
             className="border-bottom"
             value={searched}
             onChange={(searchVal) => requestSearch(searchVal)}
             onCancelSearch={() => cancelSearch()}
-          />
+          /> */}
           <TableContainer component={Paper}>
+            {/* {fetchData(data)} */}
             <Table aria-label="simple table">
               <TableHead>
                 <TableRow>
@@ -197,21 +316,23 @@ export const Inventory = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((item) => (
+                {/* {console.log(data)}
+                {console.log(rows)} */}
+                {Object.values(data).map((item) => (
                   <TableRow key={item.id}>
                     <TableCell component="th" scope="row">
-                      {item.id}
+                      {item.uuid}
                     </TableCell>
                     <TableCell>{item.name}</TableCell>
                     <TableCell align="center">{item.quantity}</TableCell>
                     <TableCell align="right">{item.expiry}</TableCell>
                     <TableCell align="right">
                       <div className="d-flex justify-content-end">
-                        <Button onClick={() => handleEdit(item.id)}>
+                        <Button onClick={() => handleUpdate(item)}>
                           <EditIcon />
                         </Button>
                         <Button>
-                          <DeleteIcon onClick={() => handleDelete(item.id)} />
+                          <DeleteIcon onClick={() => handleDelete(item.uuid)} />
                         </Button>
                       </div>
                     </TableCell>
