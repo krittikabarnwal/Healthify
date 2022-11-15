@@ -1,10 +1,14 @@
 import { initializeApp } from "firebase/app";
-import "firebase/compat/firestore";
+import "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { getDatabase, ref, onValue } from "firebase/database";
 require("firebase/auth");
+require("firebase/firestore");
 
 const firebaseConfig = {
   apiKey: "AIzaSyB586ekEXTQqqYPzSBNQLkyUQY-8SRKk8A",
+  databaseURL:
+    "https://healthyify-krittika-default-rtdb.asia-southeast1.firebasedatabase.app",
   authDomain: "healthyify-krittika.firebaseapp.com",
   projectId: "healthyify-krittika",
   storageBucket: "healthyify-krittika.appspot.com",
@@ -16,5 +20,4 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
-export const db = app.firestore;
-console.log(db);
+export const db = getDatabase();

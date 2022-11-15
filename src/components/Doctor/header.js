@@ -28,6 +28,7 @@ import Paper from "@mui/material/Paper";
 import { useNavigate } from "react-router";
 import { LogoutUser } from "../Auth/logout";
 import "./index.css";
+import { v4 as uuidv4 } from "uuid";
 
 const style = {
   position: "absolute",
@@ -65,6 +66,8 @@ export const DoctorHeader = (user) => {
 
   var start = new Date();
   var y = start.toLocaleString().substring(0, 8);
+  var d = user ? user.user.user.displayName : "Doctor";
+  var did = user ? user.user.user.uid : "Doctor";
 
   const [med, setMed] = useState({
     name: "",
@@ -80,6 +83,7 @@ export const DoctorHeader = (user) => {
     symptons: "",
     diagnosis: "",
     test: "",
+    uuid: uuidv4(),
   });
 
   const handlePrescription = (e) => {
@@ -97,7 +101,7 @@ export const DoctorHeader = (user) => {
 
   const postData = async (e) => {
     e.preventDefault();
-    const { name, uniqueId, date, gender, symptons, diagnosis, test } =
+    const { name, uniqueId, date, symptons, diagnosis, test, uuid } =
       prescripton;
 
     const medicine = allmed;
@@ -110,14 +114,16 @@ export const DoctorHeader = (user) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          uuid,
           name,
           uniqueId,
           date,
-          gender,
           symptons,
           diagnosis,
           test,
           medicine,
+          doctorName: user.user.user.displayName,
+          doctorId: user.user.user.uid,
         }),
       }
     );
@@ -137,6 +143,7 @@ export const DoctorHeader = (user) => {
         symptons: "",
         diagnosis: "",
         test: "",
+        uuid: uuidv4(),
       });
       alert("Submitted Prescripton");
     }
@@ -144,6 +151,7 @@ export const DoctorHeader = (user) => {
 
   return (
     <div className="DoctorNavbar d-flex justify-content-between border-bottom doctorcolor text-white">
+      {console.log(user.user.user.displayName)}
       <div className="NavLogo d-flex my-2">
         <img
           src={"/images/doctoricon.jpg"}
@@ -198,6 +206,7 @@ export const DoctorHeader = (user) => {
 
         <div className="d-flex">
           <div className="UserName mx-3 mt-3">
+            {/* {console.log(user.user.user.uid)} */}
             {user ? user.user.user.displayName : "User Name"}
           </div>
           <LogoutUser />
