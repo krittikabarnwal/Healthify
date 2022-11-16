@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
@@ -17,6 +17,8 @@ import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
+import { ref, onValue, update } from "firebase/database";
+import { db } from "../firebase";
 import { Inventory } from "./Inventory";
 
 function TabPanel(props) {
@@ -52,73 +54,53 @@ function a11yProps(index) {
   };
 }
 
-export const PharmacyRecords = () => {
+export const PharmacyRecords = (user) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  const refpres = ref(db, "prescription");
 
-  const prescriptions = [
-    {
-      id: "iiddididi",
-      name: "Krittika Barnwal",
-      date: "30/01/2022",
-      gender: "Female",
-      uniqueId: "19JE0453",
-      doctorName: "Dr S.k. Saha",
-      symptons:
-        "Hi,his impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with th mussels, if you like.",
-      diagnosis:
-        "This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with th mussels, if you like.",
-      test: "abc \n def",
-      medicines: [
-        {
-          id: "jdfb349u",
-          name: "paracetamol",
-          quantity: 5,
-          remark: "3 times a day",
-        },
-        {
-          id: "jdfb349usdf",
-          name: "cetzine",
-          quantity: 5,
-          remark: "3 times a day",
-        },
-      ],
-      medicineGiven: "",
-    },
-    {
-      id: "iiddidi",
-      name: "Simran Barnwal",
-      date: "30/01/2022",
-      gender: "Female",
-      uniqueId: "19JE0453",
-      doctorName: "Dr S.k. Saha",
-      symptons:
-        "Hi,his impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with th mussels, if you like.",
-      diagnosis:
-        "This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with th mussels, if you like.",
-      test: "abc \n def",
-      medicines: [
-        {
-          id: "jdfb349u",
-          name: "paracetamol",
-          quantity: 5,
-          remark: "3 times a day",
-        },
-        {
-          id: "jdfb349usdf",
-          name: "cetzine",
-          quantity: 5,
-          remark: "3 times a day",
-        },
-      ],
-      medicineGiven: "Rakesh Singh",
-    },
-  ];
-  const handleGiveMedicine = (id) => {
-    console.log("given medicine to ", id);
+  const [prescriptiondata, setPrecription] = useState([]);
+  useEffect(() => {
+    onValue(refpres, (snapshot) => {
+      setPrecription([]);
+      const data = snapshot.val();
+      if (data != null) {
+        Object.values(data).map((prescription) => {
+          setPrecription((prev) => [...prev, prescription]);
+        });
+      }
+    });
+    console.log(prescriptiondata);
+  }, []);
+
+  const handleGiveMedicine = (prescription) => {
+    for (var i = 0; i < prescription.medicine.length; i++) {
+      var q = 0;
+      onValue(
+        ref(db, `/inventory/${prescription.medicine[i].uuid}`),
+        (snapshot) => {
+          const data = snapshot.val();
+          q = data.quantity;
+        }
+      );
+      if (q) {
+        // console.log(
+        //   q,
+        //   prescription.medicine[i].quantity,
+        //   q - prescription.medicine[i].quantity
+        // );
+        update(ref(db, `/inventory/${prescription.medicine[i].uuid}`), {
+          quantity: q - prescription.medicine[i].quantity,
+        });
+      }
+    }
+    update(ref(db, `/prescription/${prescription.uuid}`), {
+      medicineGiven: user.user.user.displayName,
+    });
+    alert("Medicine Given");
   };
 
   return (
@@ -148,7 +130,7 @@ export const PharmacyRecords = () => {
         >
           <div className=" overflow-auto ">
             <TabPanel value={value} index={0}>
-              {prescriptions.map((prescription) => (
+              {prescriptiondata.map((prescription) => (
                 <div>
                   {prescription.medicineGiven === "" ? (
                     <div className=" w-100 h-100 d-flex justify-content-center py-3">
@@ -198,7 +180,7 @@ export const PharmacyRecords = () => {
                                   </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                  {prescription.medicines.map((row) => (
+                                  {prescription.medicine.map((row) => (
                                     <TableRow key={row.name}>
                                       <TableCell component="th" scope="row">
                                         {row.name}
@@ -220,7 +202,7 @@ export const PharmacyRecords = () => {
                                   variant="contained"
                                   className="color4"
                                   onClick={() =>
-                                    handleGiveMedicine(prescription.id)
+                                    handleGiveMedicine(prescription)
                                   }
                                 >
                                   Give Medicine
@@ -246,7 +228,7 @@ export const PharmacyRecords = () => {
               ))}
             </TabPanel>
             <TabPanel value={value} index={1}>
-              {prescriptions.map((prescription) => (
+              {prescriptiondata.map((prescription) => (
                 <div className=" w-100 h-100 d-flex justify-content-center py-3">
                   <Card
                     sx={{
@@ -289,7 +271,7 @@ export const PharmacyRecords = () => {
                               </TableRow>
                             </TableHead>
                             <TableBody>
-                              {prescription.medicines.map((row) => (
+                              {prescription.medicine.map((row) => (
                                 <TableRow key={row.name}>
                                   <TableCell component="th" scope="row">
                                     {row.name}
@@ -307,7 +289,13 @@ export const PharmacyRecords = () => {
                         </TableContainer>
                         <div className="mt-3">
                           {prescription.medicineGiven === "" ? (
-                            <Button variant="contained" className="color4">
+                            <Button
+                              variant="contained"
+                              className="color4"
+                              onClick={() =>
+                                handleGiveMedicine(prescription.uuid)
+                              }
+                            >
                               Give Medicine
                             </Button>
                           ) : (

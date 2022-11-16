@@ -45,6 +45,7 @@ export const PatientRecords = (user) => {
       }
     });
     console.log(prescriptiondata);
+    // console.log(prescriptiondata);
     onValue(refpatient, (snapshot) => {
       setPatient([]);
       const data = snapshot.val();
@@ -67,7 +68,7 @@ export const PatientRecords = (user) => {
   const [uniqueId, setUniqueId] = useState("");
 
   return (
-    <div className="color3 py-3">
+    <div className="color3 py-3 pateintRecordsDivMain ">
       {/* {console.log(user.user.user.email)} */}
       {prescriptiondata.map((prescription) => (
         <div>

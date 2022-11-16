@@ -17,113 +17,20 @@ import { ref, onValue, set, remove, update } from "firebase/database";
 import { db } from "../firebase";
 import CancelIcon from "@mui/icons-material/Cancel";
 
-const medicines = [
-  {
-    id: "gfhf667",
-    name: "paracetamol",
-    quantity: 5,
-    expiry: "22/01/2022",
-  },
-  {
-    id: "gfhf667gdg",
-    name: "cetzine",
-    quantity: 8,
-    expiry: "22/01/2022",
-  },
-  {
-    id: "gfhf667kjhkj",
-    name: "pudin hara",
-    quantity: 8,
-    expiry: "22/01/2022",
-  },
-  {
-    id: "gfhf667rd",
-    name: "meftal spas",
-    quantity: 8,
-    expiry: "22/01/2022",
-  },
-  {
-    id: "gf667",
-    name: "paracetamol",
-    quantity: 5,
-    expiry: "22/01/2022",
-  },
-  {
-    id: "gfhf7gdg",
-    name: "cetzine",
-    quantity: 8,
-    expiry: "22/01/2022",
-  },
-  {
-    id: "gf667kjhkj",
-    name: "pudin hara",
-    quantity: 8,
-    expiry: "22/01/2022",
-  },
-  {
-    id: "gfh667rd",
-    name: "meftal spas",
-    quantity: 8,
-    expiry: "22/01/2022",
-  },
-  {
-    id: "gfhf6j67",
-    name: "paracetamol",
-    quantity: 5,
-    expiry: "22/01/2022",
-  },
-  {
-    id: "gfhf667g",
-    name: "cetzine",
-    quantity: 8,
-    expiry: "22/01/2022",
-  },
-  {
-    id: "gfhf667kjh",
-    name: "pudin hara",
-    quantity: 8,
-    expiry: "22/01/2022",
-  },
-  {
-    id: "gfhf66rd",
-    name: "meftal spas",
-    quantity: 8,
-    expiry: "22/01/2022",
-  },
-];
-
 export const Inventory = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [tempuuid, setTempUuid] = useState("");
   const [data, setdata] = useState({});
   const refinv = ref(db, "inventory");
   const [rows, setRows] = useState([]);
-  const fetchData = (data) => {
-    if (data != null) {
-      Object.values(data).map((inventory) => {
-        setinventory((prev) => [...prev, inventory]);
-      });
-      setRows(() => inventorydata);
-    }
-  };
+
   useEffect(() => {
     onValue(refinv, (snapshot) => {
       setinventory([]);
       setdata(() => snapshot.val());
-      const data = snapshot.val();
-      if (data != null) {
-        Object.values(data).map((inventory) => {
-          console.log(inventory);
-
-          setinventory((prev) => [...prev, inventory]);
-        });
-        setRows(() => inventorydata);
-      }
     });
   }, []);
   const [inventorydata, setinventory] = useState([]);
-
-  // const [rows, setRows] = useState(initialrows);
 
   const [searched, setSearched] = useState("");
   const [newMedicine, setnewMedicine] = useState({
@@ -137,8 +44,6 @@ export const Inventory = () => {
   const handleAddMedicine = async (e) => {
     e.preventDefault();
     const { name, quantity, expiry } = newMedicine;
-
-    // console.log(newMedicine);
     const uuid = uuidv4();
     set(ref(db, `/inventory/${uuid}`), {
       name,
@@ -168,14 +73,6 @@ export const Inventory = () => {
     // );
 
     alert("Added");
-    // if (res) {
-    //   setnewMedicine({
-    //     name: "",
-    //     quantity: 0,
-    //     expiry: "",
-    //   });
-    //   alert("Added");
-    // }
   };
   const requestSearch = (searchedVal) => {
     console.log(inventorydata);

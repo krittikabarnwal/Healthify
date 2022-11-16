@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
@@ -27,9 +27,11 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useNavigate } from "react-router";
 import { LogoutUser } from "../Auth/logout";
+import CancelIcon from "@mui/icons-material/Cancel";
+import Search from "@mui/icons-material/Search";
 import "./index.css";
 import { v4 as uuidv4 } from "uuid";
-import { ref, set } from "firebase/database";
+import { ref, set, onValue } from "firebase/database";
 import { db } from "../firebase";
 
 const style = {
@@ -43,8 +45,7 @@ const style = {
   p: 4,
 };
 
-export const DoctorHeader = (user) => {
-  const navigate = useNavigate();
+export const DoctorHeader = (user, handlepatientsearch) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -68,8 +69,15 @@ export const DoctorHeader = (user) => {
 
   var start = new Date();
   var y = start.toLocaleString().substring(0, 8);
-  var d = user ? user.user.user.displayName : "Doctor";
-  var did = user ? user.user.user.uid : "Doctor";
+
+  const refpatient = ref(db, "Patient");
+  const refinv = ref(db, "inventory");
+
+  const [patientdata, setPatient] = useState([]);
+  const [pname, setpname] = useState("");
+  const [data, setdata] = useState({});
+  const [instock, setinstock] = useState(0);
+  const [searchpat, setSearchPat] = useState("");
 
   const [med, setMed] = useState({
     name: "",
@@ -81,7 +89,6 @@ export const DoctorHeader = (user) => {
     name: "get from api",
     uniqueId: "",
     date: y,
-    gender: "get from api",
     symptons: "",
     diagnosis: "",
     test: "",
@@ -97,6 +104,7 @@ export const DoctorHeader = (user) => {
       name: "",
       quantity: 0,
       remark: "",
+      uuid: "",
     });
   };
 
@@ -125,6 +133,7 @@ export const DoctorHeader = (user) => {
       name: "",
       quantity: 0,
       remark: "",
+      uuid: "",
     });
     setPrescription({
       name: "get from api",
@@ -182,9 +191,64 @@ export const DoctorHeader = (user) => {
     // }
   };
 
+  const handleSearch = () => {
+    for (var i = 0; i < patientdata.length; i++) {
+      console.log(patientdata[i].uniqueId, prescripton.uniqueId);
+      if (
+        patientdata[i].uniqueId.toLowerCase() ===
+        prescripton.uniqueId.toLowerCase()
+      ) {
+        setpname(patientdata[i].name);
+        break;
+      } else {
+        setpname("");
+      }
+    }
+
+    setPrescription((prevState) => ({
+      ...prevState,
+      ["name"]: pname,
+    }));
+    // setpname(() => "");
+  };
+  const handleMedSearch = () => {
+    Object.values(data).map((inv) => {
+      // console.log(med.name.toLowerCase(), inv.name.toLowerCase());
+      if (med.name.toLowerCase() === inv.name.toLowerCase()) {
+        setinstock(() => inv.quantity);
+        setMed((prev) => ({
+          ...prev,
+          ["uuid"]: inv.uuid,
+        }));
+      }
+    });
+  };
+
+  useEffect(() => {
+    onValue(refpatient, (snapshot) => {
+      setPatient([]);
+      const data = snapshot.val();
+      if (data != null) {
+        Object.values(data).map((patient) => {
+          setPatient((prev) => [...prev, patient]);
+        });
+      }
+    });
+    onValue(refinv, (snapshot) => {
+      setdata(() => snapshot.val());
+      // const data = snapshot.val();
+      // if (data != null) {
+      //   Object.values(data).map((inv) => {
+      //     setinvData((prev) => [...prev, inv]);
+      //   });
+      // }
+    });
+    // console.log(invdata);
+  }, []);
+
   return (
     <div className="DoctorNavbar d-flex justify-content-between border-bottom doctorcolor text-white">
-      {console.log(user.user.user.displayName)}
+      {/* {console.log(user.user.user.displayName)} */}
       <div className="NavLogo d-flex my-2">
         <img
           src={"/images/doctoricon.jpg"}
@@ -214,25 +278,19 @@ export const DoctorHeader = (user) => {
         <div className="verticalLine mt-3"></div>
 
         <div className="  d-flex align-items-bottom">
-          <IconButton type="button" sx={{ p: "4px" }} aria-label="search">
+          <IconButton
+            type="button"
+            sx={{ p: "4px" }}
+            aria-label="search"
+            // onClick={handlepatientsearch(searchpat)}
+          >
             <SearchIcon sx={{ color: "white" }} />
           </IconButton>
           <InputBase
             sx={{ ml: 1, flex: 1, color: "white" }}
-            placeholder="Search Student"
-            inputProps={{ "aria-label": "search student" }}
-          />
-        </div>
-        <div className="verticalLine mt-3"></div>
-
-        <div className="ms-3 d-flex align-items-bottom">
-          <IconButton type="button" sx={{ p: "4px" }} aria-label="search">
-            <SearchIcon sx={{ color: "white" }} />
-          </IconButton>
-          <InputBase
-            sx={{ ml: 1, flex: 1, color: "white" }}
-            placeholder="Search Medicine"
-            inputProps={{ "aria-label": "search medicine" }}
+            placeholder="Search Patient by Id"
+            inputProps={{ "aria-label": "Search Patient by Id" }}
+            onChange={(e) => setSearchPat(() => e.target.value)}
           />
         </div>
         <div className="verticalLine mt-3"></div>
@@ -275,7 +333,7 @@ export const DoctorHeader = (user) => {
                   </Typography>
                   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                     <div className="d-flex justify-content-between">
-                      <div>
+                      <div className="d-flex">
                         <TextField
                           id="input-with-icon-textfield"
                           label="Unique ID"
@@ -292,6 +350,12 @@ export const DoctorHeader = (user) => {
                           variant="standard"
                           required
                         />
+                        <Button>
+                          <SearchIcon
+                            sx={{ mt: 2 }}
+                            onClick={() => handleSearch()}
+                          />
+                        </Button>
                       </div>
                       <div>
                         <TextField
@@ -328,25 +392,6 @@ export const DoctorHeader = (user) => {
                           }}
                           variant="standard"
                           value={prescripton.name}
-                          onChange={handlePrescription}
-                          required
-                        />
-                      </div>
-                      <div>
-                        <TextField
-                          id="input-with-icon-textfield"
-                          label="Gender"
-                          disabled="true"
-                          name="gender"
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <WcIcon />
-                              </InputAdornment>
-                            ),
-                          }}
-                          variant="standard"
-                          value={prescripton.gender}
                           onChange={handlePrescription}
                           required
                         />
@@ -393,7 +438,7 @@ export const DoctorHeader = (user) => {
                     <div className="mt-3">
                       Medicine:
                       <div className="d-flex justify-content-between">
-                        <div>
+                        <div className="d-flex">
                           <TextField
                             id="input-with-icon-textfield"
                             label="Medicine Name"
@@ -403,6 +448,22 @@ export const DoctorHeader = (user) => {
                               setMed({ ...med, name: e.target.value })
                             }
                           />
+                          <CancelIcon
+                            fontSize="small"
+                            sx={{ mt: 3 }}
+                            onClick={() => {
+                              setinstock(() => 0);
+                              setMed({
+                                name: "",
+                                quantity: 0,
+                                remark: "",
+                                uuid: "",
+                              });
+                            }}
+                          />
+                          <Button onClick={() => handleMedSearch()}>
+                            <SearchIcon sx={{ mt: 2 }} />
+                          </Button>
                         </div>
                         <div className="mx-1">
                           <TextField
@@ -433,7 +494,7 @@ export const DoctorHeader = (user) => {
                             id="input-with-icon-textfield"
                             label="In Stock"
                             disabled="true"
-                            value="get from API"
+                            value={instock}
                             variant="standard"
                           />
                         </div>

@@ -48,42 +48,122 @@ export const Prescriptions = (user) => {
   const [expanded, setExpanded] = React.useState("");
 
   return (
-    <div className="color1 py-3">
+    <div className="color1 py-3 DoctorRecordsDivMain">
       {console.log(prescriptiondata)}
-      {/* {prescriptiondata.map((prescription) => (
-        <div className=" w-100 h-100 d-flex justify-content-center py-3">
-          <Card
-            sx={{
-              maxWidth: 800,
-            }}
-          >
-            <CardHeader
-              avatar={
-                <Avatar className={"doctorcolor"} aria-label="recipe">
-                  {prescription.name[0]}
-                </Avatar>
-              }
-              action={
-                <ExpandMore
-                  expand={expanded !== ""}
-                  onClick={() => {
-                    if (expanded === "") setExpanded(prescription.uuid);
-                    else setExpanded("");
-                  }}
-                  aria-expanded={expanded !== ""}
-                  aria-label="show more"
+      {/* <div className="color3 py-3 pateintRecordsDivMain ">
+      {prescriptiondata.map((prescription) => (
+        <div>
+          {prescription.uniqueId === uniqueId && (
+            <div className=" w-100 h-100 d-flex justify-content-center py-3">
+              <Card
+                sx={{
+                  minWidth: 800,
+                }}
+              >
+                <CardHeader
+                  avatar={
+                    <Avatar className={"patientcolor"} aria-label="recipe">
+                      {prescription.name[0]}
+                    </Avatar>
+                  }
+                  action={
+                    <ExpandMore
+                      expand={expanded !== ""}
+                      onClick={() => {
+                        if (expanded === "") setExpanded(prescription.uuid);
+                        else setExpanded("");
+                      }}
+                      aria-expanded={expanded !== ""}
+                      aria-label="show more"
+                    >
+                      <ExpandMoreIcon />
+                    </ExpandMore>
+                  }
+                  title={prescription.doctorName}
+                  subheader={
+                    prescription.date + "  ( " + prescription.name + " )"
+                  }
+                />
+
+                <CardContent className="d-flex">
+                  <Typography variant="body2">Symptoms: &emsp;</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {"  " + prescription.symptons}
+                  </Typography>
+                </CardContent>
+
+                <Collapse
+                  in={expanded === prescription.uuid}
+                  timeout="auto"
+                  unmountOnExit
                 >
-                  <ExpandMoreIcon />
-                </ExpandMore>
-              }
-              title={prescription.name + "  ( " + prescription.uniqueId + " )"}
-              subheader={
-                prescription.date + "  ( " + prescription.doctorName + " )"
-              }
-            />
-          </Card>
+                  <CardContent>
+                    <div className="d-flex">
+                      <Typography variant="body2" paragraph>
+                        Diagnosis : &emsp;
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        paragraph
+                      >
+                        {"  " + prescription.diagnosis}
+                      </Typography>
+                    </div>
+                    <Typography variant="body2" paragraph>
+                      Medicines:
+                    </Typography>
+                    <Typography
+                      paragraph
+                      variant="body2"
+                      color="text.secondary"
+                    >
+                      <TableContainer component={Paper}>
+                        <Table
+                          sx={{ minWidth: 650 }}
+                          size="small"
+                          aria-label="a dense table"
+                        >
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>Medicine Name</TableCell>
+                              <TableCell align="right">Quantity</TableCell>
+                              <TableCell align="right">Remark</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {prescription.medicine.map((row) => (
+                              <TableRow key={row.name}>
+                                <TableCell component="th" scope="row">
+                                  {row.name}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {row.quantity}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {row.remark}
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </Typography>
+                    <div className="d-flex">
+                      <Typography variant="body2">Test: &emsp;</Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {prescription.test}
+                      </Typography>
+                    </div>
+                  </CardContent>
+                </Collapse>
+              </Card>
+            </div>
+          )}
         </div>
-      ))} */}
+      ))}
+    </div> */}
+
       {prescriptiondata.map((prescription) => (
         <div>
           {prescription.doctorId === user.user.user.uid && (
