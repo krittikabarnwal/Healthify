@@ -3,7 +3,6 @@ import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -12,6 +11,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Fab from "@mui/material/Fab";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
+import Close from "@mui/icons-material/Close";
 import WcIcon from "@mui/icons-material/Wc";
 import TextField from "@mui/material/TextField";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -45,7 +45,8 @@ const style = {
   p: 4,
 };
 
-export const DoctorHeader = (user, handlepatientsearch) => {
+export const DoctorHeader = (props) => {
+  // console.log(props.user.user.displayName);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -57,10 +58,9 @@ export const DoctorHeader = (user, handlepatientsearch) => {
       remark: "",
     });
     setPrescription({
-      name: "get from api",
+      name: "",
       uniqueId: "",
       date: y,
-      gender: "get from api",
       symptons: "",
       diagnosis: "",
       test: "",
@@ -86,7 +86,7 @@ export const DoctorHeader = (user, handlepatientsearch) => {
   });
   const [allmed, setAllMed] = useState([]);
   const [prescripton, setPrescription] = useState({
-    name: "get from api",
+    name: "",
     uniqueId: "",
     date: y,
     symptons: "",
@@ -123,8 +123,8 @@ export const DoctorHeader = (user, handlepatientsearch) => {
       diagnosis,
       test,
       medicine,
-      doctorName: user.user.user.displayName,
-      doctorId: user.user.user.uid,
+      doctorName: props.user.user.displayName,
+      doctorId: props.user.user.uid,
       medicineGiven: "",
     });
     setOpen(false);
@@ -136,10 +136,9 @@ export const DoctorHeader = (user, handlepatientsearch) => {
       uuid: "",
     });
     setPrescription({
-      name: "get from api",
+      name: "",
       uniqueId: "",
       date: y,
-      gender: "get from api",
       symptons: "",
       diagnosis: "",
       test: "",
@@ -163,8 +162,8 @@ export const DoctorHeader = (user, handlepatientsearch) => {
     //       diagnosis,
     //       test,
     //       medicine,
-    //       doctorName: user.user.user.displayName,
-    //       doctorId: user.user.user.uid,
+    //       doctorName: props.user.user.user.displayName,
+    //       doctorId: props.user.user.user.uid,
     //       medicineGiven: "",
     //     }),
     //   }
@@ -178,10 +177,9 @@ export const DoctorHeader = (user, handlepatientsearch) => {
     //     remark: "",
     //   });
     //   setPrescription({
-    //     name: "get from api",
+    //     name: "",
     //     uniqueId: "",
     //     date: y,
-    //     gender: "get from api",
     //     symptons: "",
     //     diagnosis: "",
     //     test: "",
@@ -193,7 +191,7 @@ export const DoctorHeader = (user, handlepatientsearch) => {
 
   const handleSearch = () => {
     for (var i = 0; i < patientdata.length; i++) {
-      console.log(patientdata[i].uniqueId, prescripton.uniqueId);
+      // console.log(patientdata[i].uniqueId, prescripton.uniqueId);
       if (
         patientdata[i].uniqueId.toLowerCase() ===
         prescripton.uniqueId.toLowerCase()
@@ -224,6 +222,10 @@ export const DoctorHeader = (user, handlepatientsearch) => {
     });
   };
 
+  const handlefindpat = () => {
+    props.handlepatientsearch(searchpat);
+  };
+
   useEffect(() => {
     onValue(refpatient, (snapshot) => {
       setPatient([]);
@@ -248,7 +250,6 @@ export const DoctorHeader = (user, handlepatientsearch) => {
 
   return (
     <div className="DoctorNavbar d-flex justify-content-between border-bottom doctorcolor text-white">
-      {/* {console.log(user.user.user.displayName)} */}
       <div className="NavLogo d-flex my-2">
         <img
           src={"/images/doctoricon.jpg"}
@@ -278,19 +279,25 @@ export const DoctorHeader = (user, handlepatientsearch) => {
         <div className="verticalLine mt-3"></div>
 
         <div className="  d-flex align-items-bottom">
-          <IconButton
-            type="button"
-            sx={{ p: "4px" }}
-            aria-label="search"
-            // onClick={handlepatientsearch(searchpat)}
-          >
-            <SearchIcon sx={{ color: "white" }} />
+          <IconButton type="button" sx={{ p: "4px" }} aria-label="search">
+            <SearchIcon
+              sx={{ color: "white" }}
+              onClick={() => props.setDosearch(() => true)}
+            />
           </IconButton>
           <InputBase
             sx={{ ml: 1, flex: 1, color: "white" }}
             placeholder="Search Patient by Id"
             inputProps={{ "aria-label": "Search Patient by Id" }}
-            onChange={(e) => setSearchPat(() => e.target.value)}
+            value={props.patIdSearch}
+            onChange={(e) => props.setPatIdSearch(() => e.target.value)}
+          />
+          <Close
+            sx={{ mt: 2 }}
+            onClick={() => {
+              props.setPatIdSearch(() => "");
+              props.setDosearch(() => false);
+            }}
           />
         </div>
         <div className="verticalLine mt-3"></div>
@@ -298,7 +305,7 @@ export const DoctorHeader = (user, handlepatientsearch) => {
         <div className="d-flex">
           <div className="UserName mx-3 mt-3">
             {/* {console.log(user.user.user.uid)} */}
-            {user ? user.user.user.displayName : "User Name"}
+            {props.user ? props.user.user.displayName : "User Name"}
           </div>
           <LogoutUser />
         </div>

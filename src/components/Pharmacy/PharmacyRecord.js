@@ -131,7 +131,7 @@ export const PharmacyRecords = (user) => {
           <div className=" overflow-auto ">
             <TabPanel value={value} index={0}>
               {prescriptiondata.map((prescription) => (
-                <div>
+                <div key={prescription.uuid}>
                   {prescription.medicineGiven === "" ? (
                     <div className=" w-100 h-100 d-flex justify-content-center py-3">
                       <Card
@@ -229,7 +229,10 @@ export const PharmacyRecords = (user) => {
             </TabPanel>
             <TabPanel value={value} index={1}>
               {prescriptiondata.map((prescription) => (
-                <div className=" w-100 h-100 d-flex justify-content-center py-3">
+                <div
+                  className=" w-100 h-100 d-flex justify-content-center py-3"
+                  key={prescription.uuid}
+                >
                   <Card
                     sx={{
                       width: 800,

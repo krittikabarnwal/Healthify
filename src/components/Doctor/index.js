@@ -4,14 +4,21 @@ import { Prescriptions } from "./Prescriptions";
 
 export const DoctorDashboard = (user) => {
   const [patIdSearch, setPatIdSearch] = useState("");
-  const handlePS = (searchpat) => {
-    setPatIdSearch(searchpat);
-    console.log(patIdSearch);
-  };
+  const [dosearch, setDosearch] = useState(false);
+  console.log(patIdSearch);
   return (
     <div>
-      <DoctorHeader user={user} handlepatientsearch={handlePS} />
-      <Prescriptions user={user} />
+      <DoctorHeader
+        user={user}
+        patIdSearch={patIdSearch}
+        setPatIdSearch={setPatIdSearch}
+        setDosearch={setDosearch}
+      />
+      <Prescriptions
+        user={user}
+        patIdSearch={patIdSearch}
+        dosearch={dosearch}
+      />
     </div>
   );
 };

@@ -34,17 +34,19 @@ const ExpandMore = styled((props) => {
 export const PatientRecords = (user) => {
   const refpres = ref(db, "prescription");
   const [prescriptiondata, setPrecription] = useState([]);
+  const [data, setdata] = useState({});
+
   useEffect(() => {
     onValue(refpres, (snapshot) => {
       setPrecription([]);
-      const data = snapshot.val();
+      setdata(() => snapshot.val());
       if (data != null) {
         Object.values(data).map((prescription) => {
           setPrecription((prev) => [...prev, prescription]);
         });
       }
     });
-    console.log(prescriptiondata);
+    console.log(data);
     // console.log(prescriptiondata);
     onValue(refpatient, (snapshot) => {
       setPatient([]);
@@ -69,119 +71,124 @@ export const PatientRecords = (user) => {
 
   return (
     <div className="color3 py-3 pateintRecordsDivMain ">
-      {/* {console.log(user.user.user.email)} */}
-      {prescriptiondata.map((prescription) => (
-        <div>
-          {prescription.uniqueId === uniqueId && (
-            <div className=" w-100 h-100 d-flex justify-content-center py-3">
-              {/* {console.log(patientdata)} */}
-              <Card
-                sx={{
-                  minWidth: 800,
-                }}
-              >
-                <CardHeader
-                  avatar={
-                    <Avatar className={"patientcolor"} aria-label="recipe">
-                      {prescription.name[0]}
-                    </Avatar>
-                  }
-                  action={
-                    <ExpandMore
-                      expand={expanded !== ""}
-                      onClick={() => {
-                        if (expanded === "") setExpanded(prescription.uuid);
-                        else setExpanded("");
-                      }}
-                      aria-expanded={expanded !== ""}
-                      aria-label="show more"
-                    >
-                      <ExpandMoreIcon />
-                    </ExpandMore>
-                  }
-                  title={prescription.doctorName}
-                  subheader={
-                    prescription.date + "  ( " + prescription.name + " )"
-                  }
-                />
-
-                <CardContent className="d-flex">
-                  <Typography variant="body2">Symptoms: &emsp;</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {"  " + prescription.symptons}
-                  </Typography>
-                </CardContent>
-
-                <Collapse
-                  in={expanded === prescription.uuid}
-                  timeout="auto"
-                  unmountOnExit
-                >
-                  <CardContent>
-                    <div className="d-flex">
-                      <Typography variant="body2" paragraph>
-                        Diagnosis : &emsp;
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        paragraph
-                      >
-                        {"  " + prescription.diagnosis}
-                      </Typography>
-                    </div>
-                    <Typography variant="body2" paragraph>
-                      Medicines:
-                    </Typography>
-                    <Typography
-                      paragraph
-                      variant="body2"
-                      color="text.secondary"
-                    >
-                      <TableContainer component={Paper}>
-                        <Table
-                          sx={{ minWidth: 650 }}
-                          size="small"
-                          aria-label="a dense table"
+      {Object.values(data).length === 0 ? (
+        <div className="mx-5 h4">No prescription to display</div>
+      ) : (
+        <>
+          {Object.values(data).map((prescription) => (
+            <div key={prescription.uuid}>
+              {prescription.uniqueId === uniqueId && (
+                <div className=" w-100 h-100 d-flex justify-content-center py-3">
+                  {console.log(prescription)}
+                  <Card
+                    sx={{
+                      minWidth: 800,
+                    }}
+                  >
+                    <CardHeader
+                      avatar={
+                        <Avatar className={"patientcolor"} aria-label="recipe">
+                          {prescription.name[0]}
+                        </Avatar>
+                      }
+                      action={
+                        <ExpandMore
+                          expand={expanded !== ""}
+                          onClick={() => {
+                            if (expanded === "") setExpanded(prescription.uuid);
+                            else setExpanded("");
+                          }}
+                          aria-expanded={expanded !== ""}
+                          aria-label="show more"
                         >
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>Medicine Name</TableCell>
-                              <TableCell align="right">Quantity</TableCell>
-                              <TableCell align="right">Remark</TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {prescription.medicine.map((row) => (
-                              <TableRow key={row.name}>
-                                <TableCell component="th" scope="row">
-                                  {row.name}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.quantity}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.remark}
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
-                    </Typography>
-                    <div className="d-flex">
-                      <Typography variant="body2">Test: &emsp;</Typography>
+                          <ExpandMoreIcon />
+                        </ExpandMore>
+                      }
+                      title={prescription.doctorName}
+                      subheader={
+                        prescription.date + "  ( " + prescription.name + " )"
+                      }
+                    />
+
+                    <CardContent className="d-flex">
+                      <Typography variant="body2">Symptoms: &emsp;</Typography>
                       <Typography variant="body2" color="text.secondary">
-                        {prescription.test}
+                        {"  " + prescription.symptons}
                       </Typography>
-                    </div>
-                  </CardContent>
-                </Collapse>
-              </Card>
+                    </CardContent>
+
+                    <Collapse
+                      in={expanded === prescription.uuid}
+                      timeout="auto"
+                      unmountOnExit
+                    >
+                      <CardContent>
+                        <div className="d-flex">
+                          <Typography variant="body2" paragraph>
+                            Diagnosis : &emsp;
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            paragraph
+                          >
+                            {"  " + prescription.diagnosis}
+                          </Typography>
+                        </div>
+                        <Typography variant="body2" paragraph>
+                          Medicines:
+                        </Typography>
+                        <Typography
+                          paragraph
+                          variant="body2"
+                          color="text.secondary"
+                        >
+                          <TableContainer component={Paper}>
+                            <Table
+                              sx={{ minWidth: 650 }}
+                              size="small"
+                              aria-label="a dense table"
+                            >
+                              <TableHead>
+                                <TableRow>
+                                  <TableCell>Medicine Name</TableCell>
+                                  <TableCell align="right">Quantity</TableCell>
+                                  <TableCell align="right">Remark</TableCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {prescription.medicine.map((row) => (
+                                  <TableRow key={row.name}>
+                                    <TableCell component="th" scope="row">
+                                      {row.name}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                      {row.quantity}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                      {row.remark}
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </Typography>
+                        <div className="d-flex">
+                          <Typography variant="body2">Test: &emsp;</Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {prescription.test}
+                          </Typography>
+                        </div>
+                      </CardContent>
+                    </Collapse>
+                  </Card>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      ))}
+          ))}
+        </>
+      )}
     </div>
   );
 };
