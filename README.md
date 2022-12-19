@@ -14,41 +14,41 @@ Here are a few screenshots from the website:
 
 <h3>Doctor Sign Up/Sign In Page:</h3>
 
-![alt text](<./public/images/Screenshots/Screenshot%20(1).png>)
+![alt text](https://i.imgur.com/Pc0qMNc.png)
 
 <h3>Patient Sign In/Sign Up Page:</h3>
 
-![alt text](<./public/images/Screenshots/Screenshot%20(2).png>)
+![alt text](https://i.imgur.com/6q31UwA.png)
 
 <h3>Pharmacy Sign In/Sign Up Page:</h3>
 
-![alt text](<./public/images/Screenshots/Screenshot%20(4).png>)
+![alt text](https://imgur.com/UmmVz1Q.png)
 
 <h3>Doctor's Dashboard:</h3>
 
-![alt text](<./public/images/Screenshots/Screenshot%20(5).png>)
+![alt text](https://imgur.com/KWBpq0q.png)
 
 <h3>Digital Prescription:</h3>
 
-![alt text](<./public/images/Screenshots/Screenshot%20(6).png>)
-![alt text](<./public/images/Screenshots/Screenshot%20(7).png>)
+![alt text](https://imgur.com/gAaDuY2.png)
+![alt text](https://imgur.com/TdtvSFr.png)
 
 <h3>View a patients previous medical records using admission number:</h3>
 
-![alt text](<./public/images/Screenshots/Screenshot%20(8).png>)
+![alt text](https://imgur.com/fkKf7bJ.png)
 
 <h3>Pharmacy's Dashboard: New Prescription</h3>
 
-![alt text](<./public/images/Screenshots/Screenshot%20(9).png>)
+![alt text](https://imgur.com/VkZPQom.png)
 
 <h3>Pharmacy's Dashboard: All Prescription</h3>
 
-![alt text](<./public/images/Screenshots/Screenshot%20(10).png>)
+![alt text](https://imgur.com/4FaXzbD.png)
 
 <h3>Pharmacy's Dashboard: Inventory</h3>
 
-![alt text](<./public/images/Screenshots/Screenshot%20(11).png>)
+![alt text](https://imgur.com/1zJaxyE.png)
 
-<h3>Student's Dashboard</h3>
+<h3>Patient's Dashboard</h3>
 
-![alt text](<./public/images/Screenshots/Screenshot%20(12).png>)
+![alt text](https://imgur.com/qITZd3S.png)
