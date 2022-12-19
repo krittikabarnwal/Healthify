@@ -33,8 +33,10 @@ const ExpandMore = styled((props) => {
 
 export const PatientRecords = (user) => {
   const refpres = ref(db, "prescription");
+
   const [prescriptiondata, setPrecription] = useState([]);
   const [data, setdata] = useState({});
+  const [patientdata, setPatient] = useState([]);
 
   useEffect(() => {
     onValue(refpres, (snapshot) => {
@@ -45,17 +47,21 @@ export const PatientRecords = (user) => {
           setPrecription((prev) => [...prev, prescription]);
         });
       }
+      // console.log(data);
+      // console.log("prescriptiondata", prescriptiondata);
     });
-    console.log(data);
-    // console.log(prescriptiondata);
+    // console.log("prescriptiondata", prescriptiondata);
+
+    const refpatient = ref(db, "Patient");
     onValue(refpatient, (snapshot) => {
       setPatient([]);
-      const data = snapshot.val();
-      if (data != null) {
-        Object.values(data).map((patient) => {
+      const patdata = snapshot.val();
+      if (patdata != null) {
+        Object.values(patdata).map((patient) => {
           setPatient((prev) => [...prev, patient]);
         });
       }
+      // console.log(patientdata);
     });
     for (var i = 0; i < patientdata.length; i++) {
       if (patientdata[i].email === user.user.user.email) {
@@ -63,22 +69,22 @@ export const PatientRecords = (user) => {
       }
     }
   }, []);
-  const refpatient = ref(db, "Patient");
-  const [patientdata, setPatient] = useState([]);
 
   const [expanded, setExpanded] = React.useState("");
   const [uniqueId, setUniqueId] = useState("");
 
   return (
     <div className="color3 py-3 pateintRecordsDivMain ">
-      {Object.values(data).length === 0 ? (
+      {prescriptiondata.length === 0 ? (
         <div className="mx-5 h4">No prescription to display</div>
       ) : (
         <>
           {Object.values(data).map((prescription) => (
             <div key={prescription.uuid}>
+              {console.log(uniqueId, prescription.uniqueId, prescription)}
               {prescription.uniqueId === uniqueId && (
                 <div className=" w-100 h-100 d-flex justify-content-center py-3">
+                  {console.log(uniqueId, prescription.uniqueId)}
                   {console.log(prescription)}
                   <Card
                     sx={{

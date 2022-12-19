@@ -46,6 +46,7 @@ export const Prescriptions = (props) => {
           setPrecription((prev) => [...prev, prescription]);
         });
       }
+      console.log(prescriptiondata);
     });
   }, []);
 
